@@ -4,7 +4,7 @@ My interactive portfolio, built for recruiters and hiring managers:
 
 1. **Hero & About:** who I am, what I'm looking for, skills, education.
 2. **Journey Map:** every project from 2024 to 2026 on a winding trail. Hover or tap a stop for details.
-3. **Explore Mode:** a walkable 2D campus with one classroom per year, where I (a chibi version of me) introduce each project. It also has a Skills Tree, day/night lighting, Byte the AI teammate, a hidden retro console with Snake, and optional lo-fi music.
+3. **Explore Mode:** a walkable 2D campus with one classroom per year, where I (a chibi version of me) introduce each project. It also has a Skills Tree, day/night lighting, a hidden retro console with Snake, and optional lo-fi music.
 
 **Stack:** Vite · React 19 · TypeScript · Tailwind CSS v4 · Motion. Explore Mode is a small custom engine that draws everything as SVG: crisp at any zoom and about 20 KB, loaded only when someone clicks Explore. Deployed on **Vercel**.
 
@@ -33,7 +33,7 @@ All text lives in `src/data/`. You never need to touch the components.
 |---|---|
 | `src/data/profile.ts` | Name, tagline, availability badge, Quick profile rows, About paragraphs, skills, Skills Tree badges, education, certifications, languages, fun facts, links |
 | `src/data/projects.ts` | Every project. It feeds the Journey Map, the classrooms, the "Skip the tour" list and the detail panels |
-| `src/data/dialogue.ts` | What I say in Explore Mode (tutorial, room intros, Skills Tree, console) and Byte's lines |
+| `src/data/dialogue.ts` | What I say in Explore Mode (tutorial, room intros, Skills Tree, console) |
 
 Search the code for `TODO(Cheryl)` to find placeholders still waiting for your words. Detail-panel bullets that start with `TODO` are hidden automatically.
 
@@ -46,14 +46,20 @@ Search the code for `TODO(Cheryl)` to find placeholders still waiting for your w
 
 The trail, the classroom desks and the lists all update automatically.
 
-### Add screenshots
-Put images in `public/media/projects/<project-id>/` and list them on the project:
+### Add screenshots, GIFs and videos
+Put files in `public/media/projects/<project-id>/` and list them on the project:
 
 ```ts
-images: [{ src: "/media/projects/timewise-engine/gantt.png", alt: "My TeamGantt plan with milestones" }],
+images: [
+  { src: "/media/projects/timewise-engine/gantt-chart.png", alt: "My TeamGantt plan with milestones" },
+  { src: "/media/projects/fit5222-train-scheduling/trains.mp4", alt: "Trains replanning around a breakdown" },
+],
 ```
 
-An image without `src` shows a "Screenshot coming soon" placeholder.
+- Images: `.png`, `.jpg`, `.webp` or `.gif`. Videos: `.mp4` or `.webm` (they autoplay muted and loop, with controls). Optional `poster: "/media/…/frame.png"` for videos.
+- Keep images under ~1600px wide / 300 KB and videos under ~10 MB (GitHub refuses files over 100 MB).
+- If a file is missing, the panel shows a "coming soon" placeholder instead of a broken image, so you can set `src` first and add the file later.
+- Never upload coursework code, notebooks or reports, or anything showing teammates' names or student IDs.
 
 ### Resumes
 Put these two files in `public/` (the names must match exactly):
@@ -114,7 +120,7 @@ src/
   explore/         ← Explore Mode (lazy-loaded)
     engine.ts      ← movement, collisions, camera, interactions
     scenes.tsx     ← campus + classroom layouts (generated from data)
-    art.tsx        ← SVG props: buildings, desks, trees, Byte, console…
+    art.tsx        ← SVG props: buildings, desks, trees, console…
     ambient.tsx    ← Skills Tree, day/night lighting, skills list, Snake
     music.ts       ← generated lo-fi music (Web Audio)
     ui.tsx         ← panels, map, speech box, joystick

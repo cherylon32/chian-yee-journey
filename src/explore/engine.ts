@@ -23,7 +23,7 @@ export interface Interactable {
   /** trigger radius */
   r: number;
   prompt: string;
-  kind: "door" | "exit" | "station" | "tree" | "npc" | "console";
+  kind: "door" | "exit" | "station" | "tree" | "console";
   year?: Year;
   projectId?: string;
   /** which way to face while interacting */

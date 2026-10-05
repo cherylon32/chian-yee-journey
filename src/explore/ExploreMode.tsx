@@ -77,7 +77,6 @@ export default function ExploreMode({ onExit }: { onExit: () => void }) {
   const light = useLight(lightSetting);
   const music = useRef<Music | null>(null);
   const [musicOn, setMusicOn] = useState(false);
-  const byteLine = useRef(0);
 
   const modalOpen = !!panel || showList || showMap || showSkills || showGame;
   const here: Place = spec.type === "campus" ? "campus" : spec.year;
@@ -129,8 +128,6 @@ export default function ExploreMode({ onExit }: { onExit: () => void }) {
       else if (i.kind === "tree") {
         setShake((n) => n + 1);
         setSpeech({ kind: "station", text: dialogue.tree, primary: { label: "See all skills", run: () => setShowSkills(true) } });
-      } else if (i.kind === "npc") {
-        setSpeech({ kind: "station", speaker: "byte", text: dialogue.byte[byteLine.current++ % dialogue.byte.length] });
       } else if (i.kind === "console") {
         setSpeech({ kind: "station", text: dialogue.console, primary: { label: "Play", run: () => setShowGame(true) } });
       }

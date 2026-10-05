@@ -6,7 +6,6 @@ import { classrooms, projectsByYear, stationsByYear, years, type Year } from "..
 import {
   bench,
   Building,
-  byteAtTable,
   retroConsole,
   bush,
   C,
@@ -98,8 +97,7 @@ export function campusScene(from?: Year): FullScene {
   add("sign", 1190, 790, welcomeSign(), { x: 1115, y: 778, w: 150, h: 12 });
   // the Skills Tree's badge pile sits in front of the trunk (see ambient.tsx)
   colliders.push({ x: PLAZA.x - 198, y: 1052, w: 396, h: 26 });
-  // Byte, the AI teammate, and the hidden retro console
-  add("byte", 720, 1000, byteAtTable(), { x: 648, y: 962, w: 144, h: 36 });
+  // the hidden retro console
   add("console", 1795, 1240, retroConsole(), { x: 1750, y: 1222, w: 90, h: 16 });
 
   const trees: [number, number][] = [
@@ -129,7 +127,6 @@ export function campusScene(from?: Year): FullScene {
   }));
   interactables.push(
     { id: "tree", x: PLAZA.x, y: 1112, r: 90, prompt: "Shake the Skills Tree?", kind: "tree", face: "up" },
-    { id: "byte", x: 720, y: 1036, r: 85, prompt: "Say hi to Byte, my AI teammate", kind: "npc", face: "up" },
     { id: "console", x: 1795, y: 1268, r: 75, prompt: "Something's glowing behind the bush…", kind: "console", face: "up" },
   );
 
@@ -142,7 +139,6 @@ export function campusScene(from?: Year): FullScene {
     color: yearHex[y],
   }));
   labels.push({ id: "label-tree", x: PLAZA.x, y: 744, title: "Skills Tree", sub: "Walk up and give it a shake", color: "#1f6f5c", small: true });
-  labels.push({ id: "label-byte", x: 720, y: 846, title: "Byte", sub: "AI teammate", color: "#3a7fb0", small: true });
 
   const r = rng(7);
   const tufts = Array.from({ length: 170 }, () => [r() * CW, 150 + r() * (CH - 150)] as const);
@@ -196,7 +192,7 @@ export function campusScene(from?: Year): FullScene {
     background,
     props,
     labels,
-    lights: [...[250, 690, 1310, 1750].map((x) => ({ x, y: 448, r: 130 })), { x: 720, y: 930, r: 60 }, { x: 1795, y: 1180, r: 55 }],
+    lights: [...[250, 690, 1310, 1750].map((x) => ({ x, y: 448, r: 130 })), { x: 1795, y: 1180, r: 55 }],
     windows: years.map((y) => ({ x: buildingX[y] + 8, y: BY + 46, w: BW - 16, h: BH - 56 })),
   };
 }

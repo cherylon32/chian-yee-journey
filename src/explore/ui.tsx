@@ -5,7 +5,7 @@ import { m } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { Emcee } from "../components/Emcee";
 import { Icon } from "../components/icons";
-import { classrooms, projects, projectsByYear, years, type Project, type Year } from "../data/projects";
+import { classrooms, projects, projectsByYear, years, type Project, type ProjectImage, type Year } from "../data/projects";
 import { yearHex } from "./scenes";
 
 /* ── accessible dialog behaviour: focus in, Tab trapped, Esc closes, focus restored ── */
@@ -56,100 +56,165 @@ function CloseButton({ onClick, label = "Close" }: { onClick: () => void; label?
 
 /* ── project detail panel ── */
 
+const VIDEO = /\.(mp4|webm|mov)$/i;
+
+/** One screenshot, GIF or video. Missing files fall back to a "coming soon" placeholder. */
+function Media({ item, color }: { item: ProjectImage; color: string }) {
+  const [broken, setBroken] = useState(false);
+  const isVideo = !!item.src && VIDEO.test(item.src);
+  const reduced = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!item.src || broken) {
+    return (
+      <div className="grid aspect-video place-items-center rounded-xl border-2 border-dashed border-line bg-surface-2 p-4 text-center">
+        <div>
+          <Icon name="sparkle" className="mx-auto size-5" color={color} />
+          <p className="mt-1.5 text-sm font-medium text-ink-soft">{item.alt}</p>
+          <p className="text-xs text-ink-faint">{isVideo ? "Video" : "Screenshot"} coming soon</p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <figure>
+      {isVideo ? (
+        <video
+          src={item.src}
+          poster={item.poster}
+          controls
+          muted
+          loop
+          playsInline
+          autoPlay={!reduced}
+          preload="metadata"
+          aria-label={item.alt}
+          onError={() => setBroken(true)}
+          className="w-full rounded-xl border border-line bg-ink"
+        />
+      ) : (
+        <a href={item.src} target="_blank" rel="noreferrer" title="Open full size" className="block">
+          <img
+            src={item.src}
+            alt={item.alt}
+            loading="lazy"
+            onError={() => setBroken(true)}
+            className="max-h-[60vh] w-full rounded-xl border border-line bg-surface-2 object-contain transition-opacity hover:opacity-90"
+          />
+        </a>
+      )}
+      <figcaption className="mt-1.5 text-xs text-ink-faint">{item.alt}</figcaption>
+    </figure>
+  );
+}
+
 export function ProjectPanel({ project: p, onClose, onVisit }: { project: Project; onClose: () => void; onVisit?: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   useDialog(ref, onClose);
   const details = p.details.filter((d) => !d.startsWith("TODO"));
+  const color = yearHex[p.year];
+  const media = p.images ?? [];
   return (
-    <div className="fixed inset-0 z-[70]">
-      <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-ink/25" onClick={onClose} />
+    <div className="fixed inset-0 z-[70] grid place-items-center p-3 sm:p-6">
+      <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-ink/35" onClick={onClose} />
       <m.div
         ref={ref}
         role="dialog"
         aria-modal="true"
         aria-labelledby="panel-title"
         tabIndex={-1}
-        initial={{ x: 40, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="absolute inset-y-0 right-0 flex w-full max-w-[540px] flex-col bg-surface shadow-lift outline-none"
+        initial={{ opacity: 0, y: 16, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-lift outline-none"
       >
-        <div className="flex items-center justify-between gap-3 border-b border-line px-6 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-line px-6 py-3.5 sm:px-8">
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-ink-soft">
-            <span className="size-2.5 rounded-full" style={{ background: yearHex[p.year] }} />
+            <span className="size-2.5 rounded-full" style={{ background: color }} />
             Year {p.year} classroom
+            {p.featured && (
+              <span className="ml-1 inline-flex items-center gap-1 text-accent">
+                <Icon name="star" className="size-3.5" /> Featured
+              </span>
+            )}
           </span>
           <CloseButton onClick={onClose} />
         </div>
-        <div className="flex-1 overflow-y-auto px-6 py-6">
-          <span className="grid size-12 place-items-center rounded-xl" style={{ background: `${yearHex[p.year]}1a`, color: yearHex[p.year] }}>
-            <Icon name={p.icon} className="size-6" />
-          </span>
-          <h2 id="panel-title" className="mt-4 text-2xl leading-tight font-semibold">
-            {p.title}
-          </h2>
-          <p className="mt-2 font-medium text-ink-soft">{p.role}</p>
-          <p className="mt-0.5 text-sm text-ink-faint">{[p.dateLabel, p.org, p.location].filter(Boolean).join(" · ")}</p>
-          <p className="mt-5 leading-relaxed text-ink-soft">{p.summary}</p>
-          {p.keyResult && (
-            <p className="mt-4 rounded-xl bg-accent-soft px-4 py-3 text-accent-strong">
-              <span className="font-semibold">Result: </span>
-              {p.keyResult}
-            </p>
-          )}
-          {details.length > 0 && (
-            <>
-              <h3 className="mt-7 text-sm font-semibold tracking-wide text-ink-faint uppercase">What I did</h3>
-              <ul className="mt-3 space-y-2.5">
-                {details.map((d) => (
-                  <li key={d} className="flex gap-3 text-ink-soft">
-                    <span className="mt-2 size-1.5 shrink-0 rounded-full" style={{ background: yearHex[p.year] }} />
-                    <span>{d}</span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          {p.images && p.images.length > 0 && (
-            <>
-              <h3 className="mt-7 text-sm font-semibold tracking-wide text-ink-faint uppercase">Screenshots</h3>
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                {p.images.map((img) =>
-                  img.src ? (
-                    <img key={img.alt} src={img.src} alt={img.alt} loading="lazy" className="aspect-video w-full rounded-xl border border-line object-cover" />
-                  ) : (
-                    <div key={img.alt} className="grid aspect-video place-items-center rounded-xl border-2 border-dashed border-line bg-surface-2 p-3 text-center">
-                      <div>
-                        <Icon name="sparkle" className="mx-auto size-5 text-ink-faint" />
-                        <p className="mt-1 text-xs font-medium text-ink-soft">{img.alt}</p>
-                        <p className="text-xs text-ink-faint">Screenshot coming soon</p>
-                      </div>
-                    </div>
-                  ),
+
+        <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8 sm:py-7">
+          {/* without media, the whole text block sits centred in the window */}
+          <div className={media.length ? "" : "mx-auto max-w-3xl"}>
+            {/* heading */}
+            <div className="flex items-start gap-4">
+              <span className="grid size-12 shrink-0 place-items-center rounded-xl" style={{ background: `${color}1a`, color }}>
+                <Icon name={p.icon} className="size-6" />
+              </span>
+              <div className="min-w-0">
+                <h2 id="panel-title" className="text-2xl leading-tight font-semibold sm:text-[1.75rem]">
+                  {p.title}
+                </h2>
+                <p className="mt-1.5 font-medium text-ink-soft">{p.role}</p>
+                <p className="mt-0.5 text-sm text-ink-faint">{[p.dateLabel, p.org, p.location].filter(Boolean).join(" · ")}</p>
+              </div>
+            </div>
+
+            {/* text on the left, media on the right (stacked on small screens) */}
+            <div className={`mt-6 grid gap-8 ${media.length ? "lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]" : ""}`}>
+              <div>
+                <p className="text-[17px] leading-relaxed text-ink-soft">{p.summary}</p>
+                {p.keyResult && (
+                  <p className="mt-4 rounded-xl bg-accent-soft px-4 py-3 text-accent-strong">
+                    <span className="font-semibold">Result: </span>
+                    {p.keyResult}
+                  </p>
+                )}
+                {details.length > 0 && (
+                  <>
+                    <h3 className="mt-7 text-sm font-semibold tracking-wide text-ink-faint uppercase">What I did</h3>
+                    <ul className="mt-3 space-y-2.5">
+                      {details.map((d) => (
+                        <li key={d} className="flex gap-3 leading-relaxed text-ink-soft">
+                          <span className="mt-2.5 size-1.5 shrink-0 rounded-full" style={{ background: color }} />
+                          <span>{d}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                <ul className="mt-7 flex flex-wrap gap-2">
+                  {p.tags.map((t) => (
+                    <li key={t} className="chip">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+                {p.links && p.links.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {p.links.map((l) => (
+                      <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="btn-secondary">
+                        <Icon name="link" className="size-4" /> {l.label}
+                      </a>
+                    ))}
+                  </div>
                 )}
               </div>
-            </>
-          )}
-          <ul className="mt-7 flex flex-wrap gap-2">
-            {p.tags.map((t) => (
-              <li key={t} className="chip">
-                {t}
-              </li>
-            ))}
-          </ul>
-          {p.links && p.links.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-3">
-              {p.links.map((l) => (
-                <a key={l.url} href={l.url} target="_blank" rel="noreferrer" className="btn-secondary">
-                  <Icon name="link" className="size-4" /> {l.label}
-                </a>
-              ))}
+
+              {media.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold tracking-wide text-ink-faint uppercase lg:mt-1">Screenshots &amp; media</h3>
+                  <div className="mt-3 space-y-5">
+                    {media.map((item) => (
+                      <Media key={item.src ?? item.alt} item={item} color={color} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
+
         {onVisit && (
-          <div className="border-t border-line px-6 py-4">
-            <button type="button" className="btn-primary w-full" onClick={onVisit}>
+          <div className="flex justify-end border-t border-line px-6 py-3.5 sm:px-8">
+            <button type="button" className="btn-primary w-full sm:w-auto" onClick={onVisit}>
               Walk me to this desk
             </button>
           </div>
@@ -310,7 +375,6 @@ export interface Speech {
   text: string;
   /** "station" speech is tied to a spot and closes when you walk away */
   kind: "tutorial" | "room" | "station";
-  speaker?: "cheryl" | "byte";
   primary?: { label: string; run: () => void };
 }
 
@@ -331,21 +395,10 @@ export function SpeechBox({ speech, onClose }: { speech: Speech; onClose: () => 
       role="status"
     >
       <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-line bg-accent-soft">
-        {speech.speaker === "byte" ? (
-          <svg viewBox="0 0 48 48" className="size-full" aria-hidden>
-            <rect x="8" y="10" width="32" height="28" rx="9" fill="#ffffff" stroke="#c5ced7" strokeWidth="2" />
-            <rect x="12" y="15" width="24" height="18" rx="6" fill="#24324a" />
-            <rect x="16" y="20" width="5" height="5" rx="2.5" fill="#7fe0d0" />
-            <rect x="27" y="20" width="5" height="5" rx="2.5" fill="#7fe0d0" />
-            <path d="M24 10V5" stroke="#8a96a3" strokeWidth="2" />
-            <circle cx="24" cy="4" r="2.5" fill="var(--accent)" />
-          </svg>
-        ) : (
-          <Emcee pose="talk" frame={1} width={62} label="" className="absolute -top-0.5 left-1/2 -translate-x-1/2" />
-        )}
+        <Emcee pose="talk" frame={1} width={62} label="" className="absolute -top-0.5 left-1/2 -translate-x-1/2" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold tracking-wide text-accent uppercase">{speech.speaker === "byte" ? "Byte · AI teammate" : "Cheryl"}</p>
+        <p className="text-xs font-semibold tracking-wide text-accent uppercase">Cheryl</p>
         <p className="mt-0.5 text-[15px] leading-snug text-ink">
           {speech.text.slice(0, shown)}
           <span className="sr-only">{speech.text.slice(shown)}</span>

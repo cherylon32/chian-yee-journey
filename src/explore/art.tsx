@@ -318,54 +318,6 @@ export function rng(seed: number) {
 
 /* ── ambient life ── */
 
-/** "Byte", Cheryl's AI teammate, typing at a laptop on a little table. */
-export const byteAtTable = (): PropArt => ({
-  w: 160,
-  h: 150,
-  node: (
-    <>
-      <ellipse cx="80" cy="146" rx="66" ry="6" fill={C.shadow} />
-      {/* robot (sits behind the table) */}
-      <path d="M80 20v-10" stroke="#8a96a3" strokeWidth="3" strokeLinecap="round" />
-      <circle cx="80" cy="8" r="5" fill="var(--accent)" />
-      <rect x="52" y="20" width="56" height="44" rx="14" fill="#ffffff" stroke="#c5ced7" strokeWidth="2.5" />
-      <rect x="59" y="28" width="42" height="28" rx="9" fill="#24324a" />
-      <g className="byte-eyes">
-        <rect x="66" y="36" width="8" height="8" rx="4" fill="#7fe0d0" />
-        <rect x="86" y="36" width="8" height="8" rx="4" fill="#7fe0d0" />
-      </g>
-      <path d="M73 49q7 5 14 0" stroke="#7fe0d0" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <rect x="58" y="62" width="44" height="34" rx="12" fill="#eef2f5" stroke="#c5ced7" strokeWidth="2.5" />
-      <circle cx="80" cy="78" r="5" fill="var(--accent)" opacity="0.6" />
-      {/* table + laptop (seen from the front: we see the lid) */}
-      <rect x="8" y="92" width="144" height="18" rx="5" fill={C.wood} />
-      <rect x="8" y="106" width="144" height="10" rx="3" fill={C.woodDark} />
-      <path d="M22 116v28M138 116v28" stroke={C.woodDark} strokeWidth="6" strokeLinecap="round" />
-      <path d="M50 94 L56 62 H104 L110 94 Z" fill="#c9d1d9" stroke="#aab4be" strokeWidth="2" />
-      <circle cx="80" cy="78" r="5" fill="#ffffff" opacity="0.8" />
-      <rect className="byte-hand" x="44" y="88" width="16" height="10" rx="5" fill="#ffffff" stroke="#c5ced7" strokeWidth="2" />
-      <rect className="byte-hand byte-hand-r" x="100" y="88" width="16" height="10" rx="5" fill="#ffffff" stroke="#c5ced7" strokeWidth="2" />
-      {/* code drifting up from the laptop */}
-      {["{ }", "</>", "=>"].map((t, i) => (
-        <text
-          key={t}
-          className="code-float"
-          style={{ animationDelay: `${i * 0.93}s` }}
-          x={[40, 112, 76][i]}
-          y="60"
-          textAnchor="middle"
-          fontSize="13"
-          fontWeight="700"
-          fill="var(--accent)"
-          fontFamily="ui-monospace, monospace"
-        >
-          {t}
-        </text>
-      ))}
-    </>
-  ),
-});
-
 /** The hidden retro console: a little CRT with a console and controller. */
 export const retroConsole = (): PropArt => ({
   w: 120,

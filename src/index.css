@@ -205,50 +205,6 @@
   }
 }
 /* ── Explore Mode ambient life ─────────────────── */
-.byte-hand {
-  transform-box: fill-box;
-  animation: byte-type 0.32s steps(2, jump-none) infinite;
-}
-.byte-hand-r {
-  animation-delay: -0.16s;
-}
-@keyframes byte-type {
-  50% {
-    transform: translateY(-3px);
-  }
-}
-.byte-eyes {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: byte-blink 4.5s infinite;
-}
-@keyframes byte-blink {
-  0%,
-  94%,
-  100% {
-    transform: scaleY(1);
-  }
-  97% {
-    transform: scaleY(0.1);
-  }
-}
-.code-float {
-  animation: code-float 2.8s ease-out infinite;
-  opacity: 0;
-}
-@keyframes code-float {
-  0% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  20% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-34px);
-  }
-}
 .crt-flicker {
   animation: crt-flicker 3s infinite;
 }
@@ -314,9 +270,6 @@
     scroll-behavior: auto;
   }
   .emcee-wave-arm,
-  .byte-hand,
-  .byte-eyes,
-  .code-float,
   .crt-flicker,
   .chip-hang,
   .chip-land,

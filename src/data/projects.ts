@@ -12,9 +12,14 @@ export interface ProjectLink {
   url: string;
 }
 
+/** A screenshot (.png/.jpg/.webp), GIF, or short video (.mp4/.webm). */
 export interface ProjectImage {
-  src?: string; // leave empty to show a placeholder
+  /** e.g. "/media/projects/<project-id>/demo.mp4". Leave out to show a "coming soon" placeholder. */
+  src?: string;
+  /** Describe what it shows (read aloud by screen readers, also the caption). */
   alt: string;
+  /** Videos only: an image shown before the video plays. */
+  poster?: string;
 }
 
 export interface Project {
@@ -85,21 +90,27 @@ export const projects: Project[] = [
   },
   {
     id: "hackfest-solana",
-    title: "Monash Hackfest x Solana",
-    shortTitle: "Hackfest x Solana",
+    title: "Monash Hackfest x Solana: MechaHolo, AR Beasts Unleashed",
+    shortTitle: "Hackfest: MechaHolo",
     year: 2024,
     start: "2024-08",
     dateLabel: "Aug 2024",
-    org: "Monash Blockchain Club",
-    role: "Participant", // TODO(Cheryl): confirm role
-    summary: "A 3-day blockchain ideathon with the Monash Blockchain Club.",
+    org: "Monash Blockchain Club × Superteam (Solana)",
+    role: "Marketing & Community Engagement Specialist (team of 5)",
+    summary:
+      "Pitched MechaHolo: a real-world AR, location-based game on Solana where players capture, train and trade mechanical beasts, with a stablecoin-backed economy.",
+    keyResult: "A full product pitch in 3 days: problem, competitors, token & NFT design, go-to-market and a 5-quarter roadmap",
     details: [
-      "3-day ideathon exploring product ideas on Solana.",
-      "TODO(Cheryl): what idea did your team pitch, and what did you work on?",
+      "Ideated and pitched MechaHolo with a 5-person team (Team Manmon) in a 3-day blockchain ideathon on Solana.",
+      "Owned marketing and community engagement: a go-to-market plan with conference demos, a closed beta that rewards testers with exclusive NFTs, university workshops, influencer partnerships and a localised international launch.",
+      "Built the market case: GameFi players projected to grow from 20M (2023) to 50M+, and a competitor review of Axie Infinity, Avakin Life and My Crypto Heroes on entry cost, complexity, true NFT ownership and AR support.",
+      "Product concept: capture 'Mechas' in the real world through AR (5 types, 3 combat classes), a stablecoin-backed in-game currency to avoid speculative token crashes, and location-based NFTs for Mechas, buildings and legal AR graffiti.",
+      "Targeted three problems in Web3 gaming: grind-heavy play-to-earn, gaming NFTs with no lasting value, and fragile token economies.",
+      "Planned a 5-quarter roadmap: beta gameplay, token release, AR-hardware integration and a launch campaign.",
     ],
-    tags: ["Blockchain", "Ideation"],
+    tags: ["Product ideation", "Go-to-market", "Community", "Competitor analysis", "Web3 / Solana", "AR"],
     icon: "blocks",
-    emceeLine: "Three days, one blockchain idea, a lot of coffee.",
+    emceeLine: "An AR game where you catch mechanical beasts in the real world, on Solana! I led our marketing and community plan.",
   },
   {
     id: "ipsos-cx",
@@ -147,8 +158,30 @@ export const projects: Project[] = [
     tags: ["Deep learning", "Python", "TensorFlow", "Flask", "Docker", "Healthcare"],
     links: [{ label: "GitHub", url: "https://github.com/chianyee32/Final-Year-Project" }],
     images: [
-      { alt: "FYP web app: CSV upload and prediction results" },
-      { alt: "Top-10 drug response chart" },
+      {
+        src: "/media/projects/fyp-chemoresistance/fyp-website-intro-page.png",
+        alt: "The live web app's introduction page: a multi-omics model that predicts cancer cell lines' resistance to chemotherapy drugs",
+      },
+      {
+        src: "/media/projects/fyp-chemoresistance/fyp-data-pre-processing.png",
+        alt: "Training data pre-processing: CCLE gene expression and other omics, GDSC drug responses (LN_IC50) and PubChem structures converted to 256-bit fingerprints, merged into one training table",
+      },
+      {
+        src: "/media/projects/fyp-chemoresistance/fyp-experiment-results.png",
+        alt: "Experiment results: transcriptomics + proteomics + GDSC2 + isoSMILES reached R² 0.804 (RMSE 1.22), while adding genomics lowered accuracy",
+      },
+      {
+        src: "/media/projects/fyp-chemoresistance/fyp-website-home-page.png",
+        alt: "Upload page: researchers upload a multi-omics CSV with the required columns",
+      },
+      {
+        src: "/media/projects/fyp-chemoresistance/fyp-website-prediction-results-generated-for-download.png",
+        alt: "After uploading: download the prediction file and filter results by cancer type",
+      },
+      {
+        src: "/media/projects/fyp-chemoresistance/fyp-top-10-sensitive-drugs-by-COLON.png",
+        alt: "Chart of the most sensitive drugs for colon cancer (lower predicted LN IC50 means more sensitive)",
+      },
     ],
     icon: "dna",
     featured: true,
@@ -156,24 +189,33 @@ export const projects: Project[] = [
   },
   {
     id: "umhackathon-grab",
-    title: "UMHackathon 2025: AI Assistant for Grab Merchants",
-    shortTitle: "UMHackathon: Grab AI",
+    title: "UMHackathon 2025: MEX Assistant, an AI Assistant for Grab Merchants",
+    shortTitle: "UMHackathon: MEX Assistant",
     year: 2025,
     start: "2025-04",
     dateLabel: "Apr 2025",
-    org: "UMHackathon 2025",
+    org: "UMHackathon 2025 · Team 502 Bad Gateway",
     role: "UI/UX & Pitch (team of 5)",
     summary:
-      "Proposed a chat-based AI assistant giving Grab merchants real-time insights, personalised tips and multilingual support.",
+      "Designed MEX Assistant: a chat-based AI assistant in the Grab merchant app that turns sales data into proactive, multilingual business advice.",
+    keyResult: "Conversational UI, RAG-based backend design and a roadmap to pilot with Grab merchant-partners",
     details: [
-      "Cross-university team of 5.",
-      "Identified merchant pain points and shaped the product concept.",
-      "Proposed a chat-based AI assistant with real-time business insights, personalised recommendations and multilingual support.",
-      "Designed the UI/UX and delivered the pitch.",
+      "Cross-university team of 5 tackling Grab's merchant-assistant challenge.",
+      "Defined merchant needs: real-time insights, personalised recommendations, automated sales and inventory reports, and alerts on critical issues, tailored to merchant type, region and size.",
+      "Designed the UI/UX: a clean conversational assistant with quick-access buttons (Sales & Earnings, Business Tips, Inventory Status), card-style answers (today's sales vs yesterday, top item, quiet and peak hours) and a bottom chat box.",
+      "Shaped the features: AI-powered sales insights and marketing advice, recommendations for nearby delivery partners, and multilingual, colloquial conversation in regional languages.",
+      "Backend design: retrieval-augmented generation (RAG), where prompts and merchant documents in a vector database give an LLM the right context, with platform API integrations and safety policies before each response.",
+      "Delivered the pitch, with a roadmap from demo-ready prototype to pilot testing with Grab merchant-partners and launch inside the GrabMerchant app.",
     ],
-    tags: ["Product ideation", "UI/UX", "AI", "Pitching"],
+    tags: ["Product ideation", "UI/UX", "Conversational AI", "RAG / LLMs", "Merchant analytics", "Pitching"],
+    images: [
+      {
+        src: "/media/projects/umhackathon-grab/assistant-ui.png",
+        alt: "MEX Assistant mock-ups: a sales summary card, and quick-access buttons with the question 'Why my sales drop today?'",
+      },
+    ],
     icon: "chat",
-    emceeLine: "A hackathon where I got to design and pitch a product for Grab merchants. So fun!",
+    emceeLine: "MEX Assistant! I designed a chat assistant that tells Grab merchants why their sales dropped today, in their own language.",
   },
   {
     id: "monash-cup-2025",
@@ -212,9 +254,20 @@ export const projects: Project[] = [
       "Set up and ran the team's Scrum board in ClickUp.",
     ],
     tags: ["Product management", "Agile/Scrum", "Backlog", "Gantt", "Stakeholders"],
+    // Own artefacts only: no reports, and teammates' avatars are hidden on the Scrum board.
     images: [
-      { alt: "My TeamGantt project plan with milestones" },
-      { alt: "The team's Scrum board in ClickUp" },
+      {
+        src: "/media/projects/timewise-engine/requirements-traceability-matrix.png",
+        alt: "The Requirements Traceability Matrix I wrote: functional and non-functional requirements with category, source, status and assumptions",
+      },
+      {
+        src: "/media/projects/timewise-engine/part-of-gantt-chatt.png",
+        alt: "Part of my TeamGantt plan: work packages broken into sprints with dependencies and milestones",
+      },
+      {
+        src: "/media/projects/timewise-engine/scrum-board.png",
+        alt: "The team's ClickUp Scrum board in Sprint 2: epics in the product backlog, then to do, in progress, blocked and done (assignees hidden)",
+      },
     ],
     icon: "clock",
     featured: true,
@@ -239,9 +292,20 @@ export const projects: Project[] = [
     ],
     tags: ["Python", "NumPy", "PyTorch", "Unsupervised learning", "Neural networks", "Maths behind ML"],
     // Coursework: no links to notebooks or code. Own plots only.
-    // To show the plot: add public/media/projects/fit5201-ml-from-scratch/boundaries.png
-    // and set src: "/media/projects/fit5201-ml-from-scratch/boundaries.png"
-    images: [{ alt: "Decision boundaries: Perceptron vs 3-layer neural network" }],
+    images: [
+      {
+        src: "/media/projects/fit5201-ml-from-scratch/perceptron-vs-neural-network.png",
+        alt: "Best Perceptron (test error 0.123) vs best 3-layer neural network (0.0445) on non-linearly separable data, with test errors compared",
+      },
+      {
+        src: "/media/projects/fit5201-ml-from-scratch/perceptron-decision-boundaries.png",
+        alt: "Perceptron decision boundaries with and without early stopping: a straight line can't separate the two classes",
+      },
+      {
+        src: "/media/projects/fit5201-ml-from-scratch/neural-network-decision-boundaries.png",
+        alt: "Neural network boundaries: light regularisation (λ=0.001) bends around the data, heavy regularisation (λ=1.0) flattens into a near-straight line",
+      },
+    ],
     icon: "network",
     emceeLine: "Here I opened the black box: no shortcuts, I wrote the maths and the code myself!",
   },
@@ -266,9 +330,12 @@ export const projects: Project[] = [
     ],
     tags: ["Python", "A* search", "Multi-agent pathfinding", "Optimisation", "Scheduling", "Operations"],
     // Coursework: no link to the (private) repository. Own media only.
-    // To show the recording: add public/media/projects/fit5222-train-scheduling/trains.gif
-    // and set src: "/media/projects/fit5222-train-scheduling/trains.gif"
-    images: [{ alt: "Screen recording: trains replanning around a breakdown in the Flatland visualiser" }],
+    images: [
+      {
+        src: "/media/projects/fit5222-train-scheduling/flatland-multi-agent-level1.mp4",
+        alt: "Screen recording of the Flatland visualiser: multiple trains following conflict-free routes planned by my solver",
+      },
+    ],
     icon: "route",
     featured: true,
     emceeLine:
