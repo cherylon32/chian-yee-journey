@@ -1,0 +1,17 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Emcee sheet preview</title>
+<style>body{font-family:sans-serif;background:#eef6ee;margin:16px} .row{display:flex;gap:8px;align-items:end;margin-bottom:8px} .cell{background:#fff;border-radius:8px;padding:4px;text-align:center;font-size:11px}</style>
+</head><body><div id="out"></div>
+<script type="module">
+import { emceeSvg } from "../src/character/emcee.ts";
+const out = document.getElementById("out");
+out.innerHTML += `<div class="row"><div class="cell">${emceeSvg({dir:"down",pose:"wave",frame:0},4)}<br>hero</div><div class="cell">${emceeSvg({dir:"right",pose:"idle"},4)}</div><div class="cell">${emceeSvg({dir:"up",pose:"idle"},4)}</div></div>`;
+for (const dir of ["down","up","left","right"]) {
+  let row = '<div class="row">';
+  for (const pose of ["idle","walk","wave","talk"]) for (let f=0; f<4; f++) {
+    if ((pose==="wave"||pose==="talk") && (dir!=="down" || f>1)) continue;
+    row += `<div class="cell">${emceeSvg({dir,pose,frame:f},1.5)}<br>${pose}${f}</div>`;
+  }
+  out.innerHTML += row + '</div>';
+}
+</script></body></html>

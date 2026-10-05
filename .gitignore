@@ -1,0 +1,17 @@
+node_modules
+dist
+.vercel
+*.local
+.DS_Store
+
+# Personal working files - not part of the public site
+Portfolio_Prompt_for_Claude_Code.md
+*.jpeg
+*.jpg
+!public/**/*.jpg
+!public/**/*.jpeg
+*.tsbuildinfo
+.claude
+
+# Source material (pitch decks etc.) - may contain teammates' details, keep private
+My Projects/
