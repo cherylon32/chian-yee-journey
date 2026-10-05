@@ -39,7 +39,7 @@ export interface Project {
   links?: ProjectLink[];
   images?: ProjectImage[];
   /** Line icon name (see components/icons.tsx): puzzle, scale, blocks, clipboard,
-   *  dna, chat, trophy, clock, cloud, plus, star, code, chart, … */
+   *  dna, chat, trophy, clock, cloud, route, network, plus, star, chart, … */
   icon: string;
   featured?: boolean;
   comingSoon?: boolean;
@@ -47,37 +47,18 @@ export interface Project {
   emceeLine: string;
 }
 
-export const classrooms: Record<Year, { name: string; blurb: string }> = {
-  2024: { name: "Year 2024", blurb: "Going global: consulting, blockchain & algorithms" },
+export const classrooms: Record<Year, { name: string; blurb: string; /** desk order inside the room (project ids); unlisted ones follow by date */ order?: string[] }> = {
+  2024: { name: "Year 2024", blurb: "Going global: consulting & blockchain" },
   2025: { name: "Year 2025", blurb: "Deep learning, research, hackathons & leadership" },
-  2026: { name: "Year 2026", blurb: "Product management & what's next" },
+  2026: {
+    name: "Year 2026",
+    blurb: "Product management, machine learning & optimisation",
+    order: ["timewise-engine", "fit5222-train-scheduling", "fit5201-ml-from-scratch", "coming-soon"],
+  },
 };
 
 export const projects: Project[] = [
   // ── 🏫 Year 2024 ─────────────────────────────────────────────
-  {
-    id: "algorithmic-adventures",
-    title: "Algorithmic Adventures: From Fusion Logic to Forest Escapes",
-    shortTitle: "Algorithmic Adventures",
-    year: 2024,
-    start: "2024-04",
-    dateLabel: "Apr 2024",
-    org: "Monash University",
-    role: "Developer", // TODO(Cheryl): confirm role
-    summary: "An algorithms & data structures project solving puzzle-style problems.", // TODO(Cheryl): 1–2 line summary
-    details: [
-      "TODO(Cheryl): what problems did you solve, and which algorithms / data structures did you use?",
-    ],
-    tags: ["Algorithms", "Data structures", "Python"],
-    links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/chianyee32/Algorithmic-Adventures-From-Fusion-Logic-to-Forest-Escapes",
-      },
-    ],
-    icon: "puzzle",
-    emceeLine: "Algorithms homework, but make it an adventure! Fusion logic and forest escapes.",
-  },
   {
     id: "teamwork-ai-ethics",
     title: "TeaMWork Virtual Internship: Ethical Implementation of AI",
@@ -240,19 +221,58 @@ export const projects: Project[] = [
     emceeLine: "TimeWise Engine! As Project Manager I owned the scope, the backlog and the whole plan.",
   },
   {
-    id: "aws-workshop",
-    title: "AWS Cloud Practitioners Workshop",
-    shortTitle: "AWS Workshop",
+    id: "fit5201-ml-from-scratch",
+    title: "Machine Learning Algorithms from Scratch",
+    shortTitle: "ML from Scratch",
     year: 2026,
-    start: "2026-08",
-    dateLabel: "Aug 2026 – present",
-    org: "Monash AWS Student Builder Group",
-    role: "Participant", // TODO(Cheryl): confirm role
-    summary: "Learning cloud fundamentals with the Monash AWS Student Builder Group.",
-    details: ["TODO(Cheryl): what are you building or learning here?"],
-    tags: ["Cloud", "AWS"],
-    icon: "cloud",
-    emceeLine: "Currently leveling up my cloud skills with AWS. Still in progress!",
+    start: "2026-05",
+    dateLabel: "May 2026",
+    org: "FIT5201 Machine Learning, Monash University",
+    role: "Individual project",
+    summary:
+      "Derived and coded core ML algorithms myself (EM clustering, Perceptrons, neural networks, autoencoders) instead of calling libraries.",
+    keyResult: "Clustered news articles over a 30K-word vocabulary with my own EM implementation",
+    details: [
+      "Derived and implemented soft- and hard-EM for multinomial mixture models in NumPy (log-space) to cluster news articles over a 30K-word vocabulary. Soft-EM found better solutions, while hard-EM converged ~9× faster (≈6 vs 51 iterations).",
+      "Compared L2-regularised Perceptrons (with and without early stopping) against 3-layer neural networks on non-linearly separable data, visualising their decision boundaries.",
+      "Built a PyTorch autoencoder for self-taught learning on handwritten digits with only 40 labelled samples, and analysed when unlabelled data helps (and when it doesn't).",
+    ],
+    tags: ["Python", "NumPy", "PyTorch", "Unsupervised learning", "Neural networks", "Maths behind ML"],
+    // Coursework: no links to notebooks or code. Own plots only.
+    // To show the plot: add public/media/projects/fit5201-ml-from-scratch/boundaries.png
+    // and set src: "/media/projects/fit5201-ml-from-scratch/boundaries.png"
+    images: [{ alt: "Decision boundaries: Perceptron vs 3-layer neural network" }],
+    icon: "network",
+    emceeLine: "Here I opened the black box: no shortcuts, I wrote the maths and the code myself!",
+  },
+  {
+    id: "fit5222-train-scheduling",
+    title: "Multi-Agent Train Scheduling under Malfunctions",
+    shortTitle: "Multi-Agent Trains",
+    year: 2026,
+    start: "2026-09",
+    dateLabel: "Sep 2026",
+    org: "FIT5222 Planning & Automated Reasoning, Monash University",
+    role: "Individual project",
+    summary:
+      "Conflict-free route planning for up to 150 trains on a simulated railway, with live replanning when trains break down.",
+    keyResult: "Delivered 99.9% of 2,800+ trains and met 93.5% of deadlines across 56 benchmark instances",
+    details: [
+      "Built conflict-free route planners in Python for the Flatland railway simulator, progressing from single-train A* search to multi-agent planning with space-time reservation tables.",
+      "Implemented Safe Interval Path Planning (SIPP), prioritised planning and Large Neighbourhood Search (MAPF-LNS) with malfunction-aware replanning.",
+      "Sped up search with cached reverse-Dijkstra heuristics per map.",
+      "Refined the solution over 25+ Git-tracked experiments (e.g. deadlock rerouting, search budgets near the time limit, slack-based agent ordering).",
+      "Results: 99.9% of 2,800+ trains delivered and 93.5% of deadlines met, across 56 test instances of up to 150 trains each.",
+    ],
+    tags: ["Python", "A* search", "Multi-agent pathfinding", "Optimisation", "Scheduling", "Operations"],
+    // Coursework: no link to the (private) repository. Own media only.
+    // To show the recording: add public/media/projects/fit5222-train-scheduling/trains.gif
+    // and set src: "/media/projects/fit5222-train-scheduling/trains.gif"
+    images: [{ alt: "Screen recording: trains replanning around a breakdown in the Flatland visualiser" }],
+    icon: "route",
+    featured: true,
+    emceeLine:
+      "Ever wondered how to get 150 trains home on time when some of them break down? This one's my favourite puzzle!",
   },
   {
     id: "coming-soon",
@@ -273,7 +293,14 @@ export const projects: Project[] = [
 
 export const years: Year[] = [2024, 2025, 2026];
 
-/** Projects for one classroom, in date order. */
+/** Projects for one year, in date order (Journey Map, lists). */
 export function projectsByYear(year: Year): Project[] {
   return projects.filter((p) => p.year === year).sort((a, b) => a.start.localeCompare(b.start));
+}
+
+/** Desks inside a classroom: `classrooms[year].order` first, then the rest by date. */
+export function stationsByYear(year: Year): Project[] {
+  const order = classrooms[year].order ?? [];
+  const rank = (p: Project) => (order.includes(p.id) ? order.indexOf(p.id) : order.length);
+  return projectsByYear(year).sort((a, b) => rank(a) - rank(b));
 }

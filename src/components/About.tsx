@@ -115,6 +115,7 @@ export function Skills() {
 }
 
 export function FunFacts() {
+  if (profile.funFacts.length === 0) return null;
   return (
     <section className="mx-auto max-w-6xl px-5 pt-16 pb-4">
       <Reveal className="card flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

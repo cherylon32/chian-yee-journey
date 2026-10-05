@@ -2,7 +2,7 @@
 // Everything here is generated from src/data, so adding a project adds a desk.
 
 import type { ReactNode } from "react";
-import { classrooms, projectsByYear, years, type Year } from "../data/projects";
+import { classrooms, projectsByYear, stationsByYear, years, type Year } from "../data/projects";
 import {
   bench,
   Building,
@@ -218,7 +218,7 @@ function stationSpots(n: number): [number, number][] {
 }
 
 export function stationSpawn(year: Year, projectId: string): Spawn {
-  const list = projectsByYear(year);
+  const list = stationsByYear(year);
   const i = Math.max(0, list.findIndex((p) => p.id === projectId));
   const [x, y] = stationSpots(list.length)[i];
   return { x, y: y + 56, dir: "up" };
@@ -226,7 +226,7 @@ export function stationSpawn(year: Year, projectId: string): Spawn {
 
 export function classroomScene(year: Year, spawn?: Spawn): FullScene {
   const color = yearHex[year];
-  const list = projectsByYear(year);
+  const list = stationsByYear(year);
   const spots = stationSpots(list.length);
   const RH = roomHeight(list.length);
   const colliders: Rect[] = [

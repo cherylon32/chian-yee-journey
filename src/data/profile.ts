@@ -63,6 +63,8 @@ export const profile = {
       items: [
         "Python (pandas, NumPy, scikit-learn)",
         "TensorFlow / Keras",
+        "PyTorch",
+        "Search & optimisation (A*, SIPP, LNS)",
         "SQL",
         "R",
         "Tableau",
@@ -88,13 +90,14 @@ export const profile = {
     { label: "Python", short: "Py", group: "Data & ML" },
     { label: "SQL", short: "SQL", group: "Data & ML" },
     { label: "TensorFlow", short: "TF", group: "Data & ML" },
+    { label: "PyTorch", short: "PT", group: "Data & ML" },
+    { label: "Pathfinding", short: "A*", group: "Data & ML" },
     { label: "Tableau", short: "Tb", group: "Data & ML" },
     { label: "Agile / Scrum", short: "Ag", group: "Product" },
     { label: "User stories", short: "US", group: "Product" },
     { label: "UI/UX", short: "UX", group: "Product" },
     { label: "Docker", short: "Dk", group: "Tools" },
     { label: "Git", short: "Git", group: "Tools" },
-    { label: "AWS", short: "AWS", group: "Tools" },
   ],
 
   education: [
@@ -123,10 +126,9 @@ export const profile = {
 
   languages: ["English", "Mandarin", "Bahasa Malaysia", "Cantonese", "Hakka"],
 
-  // TODO(Cheryl): add more fun facts
-  funFacts: [
-
-  ],
+  // "Outside of work" card. Leave empty to hide it.
+  // icon: one of "leaf" | "gamepad" | "flask" | "sparkle", e.g. { icon: "leaf", text: "Loves plants" }
+  funFacts: [] as readonly { icon: string; text: string }[],
 } as const;
 
 export type Profile = typeof profile;

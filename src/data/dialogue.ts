@@ -15,6 +15,6 @@ export const dialogue = {
   rooms: {
     2024: "Year 2024! My study-abroad year and my first internship.",
     2025: "Year 2025, the big one! My Final Year Project and my Ipsos internship live here.",
-    2026: "Year 2026: where I found product management. Come see!",
+    2026: "Year 2026: product management, machine learning from scratch, and a whole railway. Come see!",
   },
 } as const;
